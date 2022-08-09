@@ -3,31 +3,38 @@
 	<head>
 		<title>Image Test</title>
 		<script>
+			
 			function main() {
 				var imageData = getImageData("circle.png");
 				console.log(imageData.length);
 			}
 
-			function getImageData(src) {
-				var image = new Image();
-				image.src = src;
-				console.log(image);
+			function getImage(src) {
+				return new Promise(resolve => {
+					var image = new Image();
+					image.src = src;
+					image.onload = function() {
+						resolve(image);
+					}
+				});
+			}
 
-				image.onload = function() {
-					var cv = document.createElement("canvas");
-					cv.width = image.naturalWidth;
-					cv.height = image.naturalHeight;
-					console.log(cv);
+			async function getImageData(src) {
+				
+				var image_obtained = await getImage(src);
 
-					var ct = cv.getContext("2d");
-					ct.drawImage(image, 0, 0);
-					console.log(ct);
-					document.body.appendChild(cv);
+				var cv = document.createElement("canvas");
+				cv.width = image_obtained.naturalWidth;
+				cv.height = image_obtained.naturalHeight;
+				console.log(cv);
 
-					var data = ct.getImageData(0, 0, cv.width, cv.height);
-					return data;
-				}
+				var ct = cv.getContext("2d");
+				ct.drawImage(image_obtained, 0, 0);
+				console.log(ct);
+				document.body.appendChild(cv);
 
+				var data = ct.getImageData(0, 0, cv.width, cv.height);
+				return data;
 			}
 
 		</script>
