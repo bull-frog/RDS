@@ -1,20 +1,42 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>RDS</title>
-		<script src="main.js"></script>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-store">
+		<title>RDS（トップ）</title>
 		<style>
 			body {
-				background-color: black;
 				text-align: center;
+				background-color: black;
+				color: white;
 			}
-			canvas {
-				background-color: white;
-				height: 80vh;
+			a {
+				text-decoration: none;
+				color: white;
+				font-weight: bold;
+			}
+			a:hover {
+				color: yellow;
+				text-decoration: underline;
 			}
 		</style>
 	</head>
-	<body onload="main()">
-		<canvas id="canvas" width="2000px" height="2150px"></canvas>
+	<body>
+	
+	<div style="max-width: 700px; display: inline-block;">
+		<h1>RDSとは</h1>
+		<a href="index.html">▶︎トップ</a>　
+		<a href="heikouhou.html">▷平行法で生成</a>　
+		<a href="kousahou.html">▷交差法で生成</a>　
+		<a href="help.html" style="color: orange;">▷つかいかた</a><br><br><br>
+
+		<div style="text-align: left;">
+			裸眼立体視には通常二枚の画像（ステレオペア）が必要ですが、RDSではこれを一枚の画像に収めることができます。たとえば、<br><br>
+		</div>
+		<img style="width: 80%;" src="example1.png">
+	
+	</div>
+	
+
 	</body>
 </html>

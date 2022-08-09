@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-store">
+		<title>RDS（平行法）</title>
+		<style>
+			body {
+				text-align: center;
+				background-color: black;
+				color: white;
+			}
+			a {
+				text-decoration: none;
+				color: white;
+				font-weight: bold;
+			}
+			a:hover {
+				color: yellow;
+				text-decoration: underline;
+			}
+			canvas {
+				max-width: 90vw;
+				max-height: 90vh;
+			}
+		</style>
+	</head>
+	<body onload="bodyDidLoad()">
+	
+	<h1>RDS（平行法）</h1>
+	<a href="index.html">▷トップ</a>　
+	<a href="">▶︎平行法で生成</a>　
+	<a href="kousahou.html">▷交差法で生成</a>　
+	<a href="help.html" style="color: orange;">▷つかいかた</a><br><br>
+
+	PNGファイルを選択してください。<br>
+	<input type="file" id="input" accept=".png"><br>
+
+	<canvas id="canvas" width="2000px" height="2150px"></canvas><br>
+
+	生成した画像は右クリックで保存できます。
+
+	<script>
+		
+		var image;
+		var canvas_hidden;
+		var context_hidden;
+		var data;
+		var fnz;
+
+		var canvas;
+
+		function bodyDidLoad() {
+			document.getElementById('input').addEventListener('change', event => {
+				let file = event.target.files;
+				let reader = new FileReader();
+				reader.readAsDataURL(file[0]);
+				reader.onload = function() {
+					main(reader.result);
+				}
+			})
+		}
+		
+		function main(src) {
+			
+			image = new Image();
+			image.src = src;
+			image.onload = function() {
+
+				canvas_hidden = document.createElement('canvas');
+				canvas_hidden.width = image.naturalWidth;
+				canvas_hidden.height = image.naturalHeight;
+
+				context_hidden = canvas_hidden.getContext('2d');
+				context_hidden.drawImage(image, 0, 0);
+				data = context_hidden.getImageData(0, 0, canvas_hidden.width, canvas_hidden.height);
+
+				console.log(data.data.length);
+
+				fnz = function(x, y) {
+					// (x, y)座標を画素の座標に変換する。
+					let px = Math.floor((x + 10) * canvas_hidden.width / 20);
+					let py = Math.floor((y + 10) * canvas_hidden.height / 20);
+					// 画像の(R成分)×(A成分)を受け取る。（0 ~ 255^2)
+					let red = data.data[(px + py * canvas_hidden.width) * 4];
+					let alpha = data.data[(px + py * canvas_hidden.width) * 4 + 3];
+					return ((255 - red) * alpha / 32512.5) - 1;
+				}
+
+				generateRDS();
+
+			}
+
+		}
+
+		function generateRDS() {
+			canvas = document.getElementById("canvas");
+
+			/**
+			 * 実際には、XYとも-10~10の範囲
+			 */
+			
+			if (canvas.getContext) {
+				
+				const xmax = 10;
+				const xmin = -10;
+				const dx = (xmax - xmin) / 6;
+			
+				const ymax = 10;
+				const ymin = -10;
+			
+				const zmax = 1;
+				const zmin = -1;
+				const z0 = dx / (zmax - zmin) / 4;
+			
+				var context = canvas.getContext("2d");
+			
+				context.fillStyle = 'white';
+				context.fillRect(0, 150, 2000, 2000);
+			
+				context.fillStyle = 'black';
+				context.fillRect(0, 0, 2000, 150);
+			
+				for (var i = 1; i <= 3000; i++) {
+					
+					var y0 = Math.random() * (ymax - ymin) + ymin;
+			
+					var zz = fnz(xmin + dx / 2, y0);
+					if (zz > zmax) {
+						zz = zmax;
+					} else if (zz < zmin) {
+						zz = zmin;
+					}
+			
+					var xx = xmin + dx - z0*zz;
+					x0 = (xx - xmin) * Math.random() + xmin;
+			
+					do {
+			
+						context.fillRect(1000 + x0*100, 1150 + y0*100, 10, 10);
+						
+						zz = fnz(x0 + dx/2, y0);
+						if (zz > zmax) {
+							zz = zmax;
+						} else if (zz < zmin) {
+							zz = zmin;
+						}
+			
+						x0 = x0 + dx - z0*zz;
+			
+					} while (x0 < xmax);
+			
+				}
+			
+				context.fillStyle = 'white';
+				context.font = '60px serif';
+				context.fillText('平行法', 50, 100);
+				context.arc(2.5*dx*100, 75, 20, 0, 7);
+				context.arc(3.5*dx*100, 75, 20, 0, 7);
+				context.fill();
+			
+			}
+
+		}
+	</script>
+		
+	</body>
+</html>
