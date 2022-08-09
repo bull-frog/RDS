@@ -5,7 +5,9 @@
 		<meta http-equiv="Cache-Control" content="no-store">
 		<title>Image Test</title>
 	</head>
-	<body onload="main()">
+	<body>
+		PNGファイルを選択してください。
+		<input type="file" id="setfile" accept=".png">
 		<script>
 
 			var image;
@@ -13,10 +15,10 @@
 			var context;
 			var data;
 			
-			function main() {
+			function main(src) {
 				
 				image = new Image();
-				image.src = 'circle.png';
+				image.src = ;
 				image.onload = function() {
 
 					canvas = document.createElement('canvas');
@@ -32,35 +34,6 @@
 				}
 
 			}
-
-			// function getImage(src) {
-			// 	return new Promise(resolve => {
-			// 		var image = new Image();
-			// 		image.src = src;
-			// 		image.onload = function() {
-			// 			resolve(image);
-			// 		}
-			// 	});
-			// }
-
-			// async function getImageData(src) {
-				
-			// 	var image_obtained = await getImage(src);
-
-			// 	var cv = document.createElement("canvas");
-			// 	cv.width = image_obtained.naturalWidth;
-			// 	cv.height = image_obtained.naturalHeight;
-			// 	console.log(cv);
-
-			// 	var ct = cv.getContext("2d");
-			// 	ct.drawImage(image_obtained, 0, 0);
-			// 	console.log(ct);
-			// 	document.body.appendChild(cv);
-
-			// 	var data = ct.getImageData(0, 0, cv.width, cv.height);
-			// 	return data;
-			// }
-
 		</script>
 		
 	</body>
