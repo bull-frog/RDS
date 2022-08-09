@@ -4,44 +4,62 @@
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Cache-Control" content="no-store">
 		<title>Image Test</title>
-		<script>
-			
-			function main() {
-				var imageData = getImageData("circle.png");
-				console.log(imageData.length);
-			}
-
-			function getImage(src) {
-				return new Promise(resolve => {
-					var image = new Image();
-					image.src = src;
-					image.onload = function() {
-						resolve(image);
-					}
-				});
-			}
-
-			async function getImageData(src) {
-				
-				var image_obtained = await getImage(src);
-
-				var cv = document.createElement("canvas");
-				cv.width = image_obtained.naturalWidth;
-				cv.height = image_obtained.naturalHeight;
-				console.log(cv);
-
-				var ct = cv.getContext("2d");
-				ct.drawImage(image_obtained, 0, 0);
-				console.log(ct);
-				document.body.appendChild(cv);
-
-				var data = ct.getImageData(0, 0, cv.width, cv.height);
-				return data;
-			}
-
-		</script>
 	</head>
 	<body onload="main()">
+		<script>
+
+			var image;
+			var canvas;
+			var context;
+			var data;
+			
+			function main() {
+				
+				image = new Image();
+				image.src = 'circle.png';
+				image.onload = function() {
+
+					canvas = document.createElement('canvas');
+					canvas.width = image.naturalWidth;
+					canvas.height = image.naturalHeight;
+
+					context = canvas.getContext('2d');
+					context.drawImage(image, 0, 0);
+					data = context.getImageData(0, 0, canvas.width, canvas.height);
+
+				}
+
+			}
+
+			// function getImage(src) {
+			// 	return new Promise(resolve => {
+			// 		var image = new Image();
+			// 		image.src = src;
+			// 		image.onload = function() {
+			// 			resolve(image);
+			// 		}
+			// 	});
+			// }
+
+			// async function getImageData(src) {
+				
+			// 	var image_obtained = await getImage(src);
+
+			// 	var cv = document.createElement("canvas");
+			// 	cv.width = image_obtained.naturalWidth;
+			// 	cv.height = image_obtained.naturalHeight;
+			// 	console.log(cv);
+
+			// 	var ct = cv.getContext("2d");
+			// 	ct.drawImage(image_obtained, 0, 0);
+			// 	console.log(ct);
+			// 	document.body.appendChild(cv);
+
+			// 	var data = ct.getImageData(0, 0, cv.width, cv.height);
+			// 	return data;
+			// }
+
+		</script>
 		
 	</body>
 </html>
